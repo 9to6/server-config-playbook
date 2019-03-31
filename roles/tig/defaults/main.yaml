@@ -1,3 +1,2 @@
 tig_version: 2.4.1
-tmp_dir: /home/{{ username }}/tmp
 tigrc_url: https://raw.githubusercontent.com/9to6/my-configurations/master/tigrc

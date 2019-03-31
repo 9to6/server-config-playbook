@@ -3,12 +3,29 @@
   become: true
   raw: |
     apt update && apt -y dist-upgrade
-- name: install basic things
+- name: Install a list of basic packages
   become: true
-  raw: |
-    apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - software-properties-common
+    - make
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - wget
+    - curl
+    - llvm
+    - xz-utils
+    - liblzma-dev
+    - libncurses5-dev 
+    - libncursesw5-dev
+    - tk-dev
+    - libffi-dev
 
 - name: clone vundle
   git: repo=https://github.com/VundleVim/Vundle.vim
@@ -16,10 +33,6 @@
        update=no
 
 - block:
-  #  - name: locale
-  #    blockinfile:
-  #      path: /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }}
-  #      block: |
   - name: install locale
     become: true
     apt:
@@ -39,11 +52,30 @@
       value: en_US.UTF-8
       vtype: select
 
-- name: upgrade pip
-  pip: 
-    name: pip
-    state: latest
+- name: install pip3
+  when: ansible_python_interpreter == '/usr/bin/python3'
+  become: true
+  apt:
+    name: python3-pip 
 
-    #- name: upgrade pip2
-    #  become: true
-    #  raw: test -e /usr/bin/pip2 && pip2 install pip --upgrade
+- name: upgrade pip3
+  when: ansible_python_interpreter == '/usr/bin/python3'
+  become: true
+  shell: pip3 install pip --upgrade
+
+- name: install pip2
+  when: ansible_python_interpreter != '/usr/bin/python3'
+  become: true
+  apt:
+    name: python-pip 
+
+- name: upgrade pip2
+  when: ansible_python_interpreter != '/usr/bin/python3'
+  become: true
+  shell: pip install pip --upgrade
+
+    #- name: upgrade pip
+    #  pip: 
+    #    name: pip
+    #    state: latest
+    #    extra_args: --upgrade

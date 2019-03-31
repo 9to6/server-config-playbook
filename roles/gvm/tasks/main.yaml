@@ -1,0 +1,11 @@
+- name: create tmp dir
+  raw: mkdir -p {{ tmp_dir }}
+
+- name: get gvm installer
+  get_url:
+    url: https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer
+    dest: "/home/{{ username }}/tmp/gvm-installer"
+    mode: 0755
+
+- name: install gvm
+  raw: "{{ usershell | default('bash') }} {{ tmp_dir }}/gvm-installer"

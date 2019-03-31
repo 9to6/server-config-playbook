@@ -1,2 +1,3 @@
 username: developrole-tkwon
 usershell: zsh
+tmp_dir: /home/{{ username }}/tmp
