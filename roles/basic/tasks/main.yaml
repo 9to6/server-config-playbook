@@ -1,0 +1,49 @@
+---
+- name: update apt
+  become: true
+  raw: |
+    apt update && apt -y dist-upgrade
+- name: install basic things
+  become: true
+  raw: |
+    apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+
+- name: clone vundle
+  git: repo=https://github.com/VundleVim/Vundle.vim
+       dest=/home/{{ username }}/.vim/bundle/Vundle.vim
+       update=no
+
+- block:
+  #  - name: locale
+  #    blockinfile:
+  #      path: /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }}
+  #      block: |
+  - name: install locale
+    become: true
+    apt:
+      name: locales
+      update_cache: yes
+
+  - name: install main language
+    become: true
+    locale_gen:
+      name: "{{ main_locale }}"
+      state: present
+
+  - name: Set default locale to en_US.UTF-8
+    debconf:
+      name: locales
+      question: locales/default_environment_locale
+      value: en_US.UTF-8
+      vtype: select
+
+- name: upgrade pip
+  pip: 
+    name: pip
+    state: latest
+
+    #- name: upgrade pip2
+    #  become: true
+    #  raw: test -e /usr/bin/pip2 && pip2 install pip --upgrade

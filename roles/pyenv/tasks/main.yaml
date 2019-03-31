@@ -1,0 +1,27 @@
+- name: get pyenv installer
+  get_url:
+    url: https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer
+    dest: /home/{{ username }}/pyenv-installer
+    mode: 0755
+
+- name: check if .pyenv folder exists
+  stat: path=/home/{{ username }}/.pyenv
+  register: pyenv
+
+- name: install pyenv
+  when: pyenv.stat.exists != True
+  raw: zsh /home/{{ username }}/pyenv-installer
+
+- name: append pyenv settings to shell resource file
+  blockinfile:
+    path: /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }}
+    block: |
+      export PATH="/home/{{ username }}/.pyenv/bin:$PATH"
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+
+- name: install specific python3
+  sudo: no
+  shell: source /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }} && pyenv install {{ python3_version | default('3.6.6') }}
+  args:
+     executable: "{{ '/usr/bin/zsh' if usershell == 'zsh' else '/bin/bash' }}"

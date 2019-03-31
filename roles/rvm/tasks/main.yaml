@@ -1,0 +1,16 @@
+- block:
+  - name: Install a list of packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - software-properties-common
+
+  - name: add apt repository ppa for rvm 
+    shell: add-apt-repository -y ppa:rael-gc/rvm
+
+  - name: Update repositories cache and install rvm package
+    apt:
+      name: rvm
+      update_cache: yes
+  become: true

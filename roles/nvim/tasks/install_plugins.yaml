@@ -1,0 +1,15 @@
+- name: install vim plugins 
+  command: nvim +PluginInstall +qall
+
+- name: update cryptography for requests module of YouCompleteMe plugins
+  pip: 
+    name: cryptography
+    state: latest
+
+- name: install CMake
+  become: true
+  apt:
+    name: cmake
+
+- name: execute install.py of YouCompleteMe
+  shell: /home/{{ username }}/.vim/bundle/YouCompleteMe/install.py

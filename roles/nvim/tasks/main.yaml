@@ -1,0 +1,38 @@
+- block:
+  - name: Install a list of packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - software-properties-common
+      - python-dev
+      - python-pip
+      - python3-dev
+      - python3-pip
+
+  - name: add apt repository ppa for neovim
+    shell: add-apt-repository -y ppa:neovim-ppa/stable
+
+  - name: Update repositories cache and install neovim package
+    apt:
+      name: neovim
+      update_cache: yes
+
+  - name: use nvim for vi
+    alternatives: name=vi path=/usr/bin/nvim
+  - name: use nvim for vim
+    alternatives: name=vim path=/usr/bin/nvim
+  - name: use nvim for editor
+    alternatives: name=editor path=/usr/bin/nvim
+  become: true
+
+- pip:
+    name: neovim
+
+- name: install vimrc
+  when: vimrc_use
+  include: install_rc.yaml
+
+- name: install vim plugins
+  when: vim_plugins_install
+  include: install_plugins.yaml

@@ -1,0 +1,14 @@
+---
+# Additional packages
+#additional_packages:
+#  - curl
+
+username: 'ktg'
+usershell: 'zsh'
+python3_version: '3.6.6'
+# group_name: '{{ current_user }}'
+#user_home_path: "{{ lookup('env','HOME') }}"
+
+# Git global config
+#git_name:
+#git_email:

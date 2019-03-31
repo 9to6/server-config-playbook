@@ -1,0 +1,10 @@
+- name: Install tmux
+  package:
+    name: tmux
+    state: present
+  tags: tmux
+
+- name: Install tmux resource file
+  get_url:
+    url: "{{ tmux_config_url }}"
+    dest: /home/{{ username }}/.tmux.conf

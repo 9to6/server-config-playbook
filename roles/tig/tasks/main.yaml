@@ -1,0 +1,29 @@
+- name: create tmp dir
+  raw: mkdir -p {{ tmp_dir }}
+
+- name: download tig release
+  get_url:
+    url: https://github.com/jonas/tig/releases/download/tig-{{ tig_version }}/tig-{{ tig_version }}.tar.gz
+    dest: "{{ tmp_dir }}/tig-{{ tig_version }}.tar.gz"
+
+- name: decompress tig
+  unarchive:
+    src: "{{ tmp_dir }}/tig-{{ tig_version }}.tar.gz"
+    dest: "{{ tmp_dir }}"
+    remote_src: yes
+
+- name: execute make
+  shell:
+    cmd: make prefix=/usr/local
+    chdir: "{{ tmp_dir }}/tig-{{ tig_version }}"
+
+- name: execute make install
+  become: true
+  shell:
+    cmd: make install prefix=/usr/local
+    chdir: "{{ tmp_dir }}/tig-{{ tig_version }}"
+
+- name: Install tig resource file
+  get_url:
+    url: "{{ tigrc_url }}"
+    dest: /home/{{ username }}/.tigrc

@@ -1,0 +1,21 @@
+- name: Install vimrc resource file
+  get_url:
+    url: "{{ vimrc_url }}"
+    dest: /home/{{ username }}/.vimrc
+
+- name: Creates nvim config directory
+  file:
+    path: /home/{{ username }}/.config/nvim
+    state: directory
+
+    #- name: create symlink to nvim directory
+    #  file: 
+    #    path: /home/{{ username }}/.vim
+    #    src: /home/{{ username }}/.config/nvim
+    #    state: link
+
+- name: create symlink to nvim resource file
+  file: 
+    path: /home/{{ username }}/.config/nvim/init.vim
+    src: /home/{{ username }}/.vimrc
+    state: link
