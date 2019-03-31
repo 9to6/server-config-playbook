@@ -2,6 +2,7 @@
   command: nvim +PluginInstall +qall
 
 - name: update cryptography for requests module of YouCompleteMe plugins
+  become: true
   pip: 
     name: cryptography
     state: latest

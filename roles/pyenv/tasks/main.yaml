@@ -1,3 +1,8 @@
+- file:
+    path: "{{ tmp_dir }}"
+    state: directory
+    mode: 0755
+
 - name: get pyenv installer
   get_url:
     url: https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer

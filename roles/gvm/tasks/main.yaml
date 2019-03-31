@@ -1,5 +1,7 @@
-- name: create tmp dir
-  raw: mkdir -p {{ tmp_dir }}
+- file:
+    path: "{{ tmp_dir }}"
+    state: directory
+    mode: 0755
 
 - name: get gvm installer
   get_url:
@@ -7,5 +9,10 @@
     dest: "/home/{{ username }}/tmp/gvm-installer"
     mode: 0755
 
+- name: check if .gvm exists
+  stat: path=/home/{{ username }}/.gvm
+  register: gvm
+
 - name: install gvm
+  when: gvm.stat.exists == False
   raw: "{{ usershell | default('bash') }} {{ tmp_dir }}/gvm-installer"

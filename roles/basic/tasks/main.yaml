@@ -1,8 +1,17 @@
 ---
-- name: update apt
+- name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
   become: true
-  raw: |
-    apt update && apt -y dist-upgrade
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: apt dist upgrade
+  become: true
+  apt:
+    upgrade: dist
+    update_cache: yes
+    dpkg_options: 'force-confold,force-confdef'
+
 - name: Install a list of basic packages
   become: true
   apt:
@@ -46,6 +55,7 @@
       state: present
 
   - name: Set default locale to en_US.UTF-8
+    become: true
     debconf:
       name: locales
       question: locales/default_environment_locale

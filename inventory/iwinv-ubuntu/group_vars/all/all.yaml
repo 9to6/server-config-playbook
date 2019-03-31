@@ -1,3 +1,3 @@
-username: developrole-tkwon
+username: "{{ ansible_user }}"
 usershell: zsh
 tmp_dir: /home/{{ username }}/tmp

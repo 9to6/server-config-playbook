@@ -28,6 +28,7 @@
 
 - pip:
     name: neovim
+  become: true
 
 - name: install vimrc
   when: vimrc_use
