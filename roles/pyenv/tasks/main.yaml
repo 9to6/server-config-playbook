@@ -27,6 +27,12 @@
 
 - name: install specific python
   when: pyenv_default_install
-  shell: source /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }} && pyenv install {{ pyenv_default_python | default('3.6.6') }}
+  shell: source /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }} && env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install {{ pyenv_default_python | default('3.6.6') }} && pyenv global {{ pyenv_default_python | default('3.6.6') }}
+  args:
+     executable: "{{ '/usr/bin/zsh' if usershell == 'zsh' else '/bin/bash' }}"
+
+- name: pip upgrade
+  when: pyenv_default_install
+  shell: source /home/{{ username }}/{{ '.zshrc' if usershell == 'zsh' else '.bashrc' }} && pip install --upgrade pip
   args:
      executable: "{{ '/usr/bin/zsh' if usershell == 'zsh' else '/bin/bash' }}"

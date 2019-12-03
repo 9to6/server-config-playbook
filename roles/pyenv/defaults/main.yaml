@@ -1,2 +1,2 @@
-pyenv_default_install: false
-pyenv_default_python: 3.6.6
+pyenv_default_install: true
+pyenv_default_python: 3.7.5
