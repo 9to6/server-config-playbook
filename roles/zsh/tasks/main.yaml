@@ -21,6 +21,11 @@
         src=/home/{{ username }}/src-hub/oh-my-zsh
         state=link
 
+- name: clone plugins - autosuggestions
+  git: repo=https://github.com/zsh-users/zsh-autosuggestions
+       dest=/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+       update=no
+
 - name: check if .zshrc exists
   stat: path=/home/{{ username }}/.zshrc
   register: zshrc
@@ -43,6 +48,7 @@
     echo 'ZSH_THEME="agnoster"' >> ~/.zshrc
     echo 'plugins=(' >> ~/.zshrc
     echo '  git' >> ~/.zshrc
+    echo '  zsh-autosuggestions' >> ~/.zshrc
     echo ')' >> ~/.zshrc
     echo 'source $ZSH/oh-my-zsh.sh' >> ~/.zshrc
 - name: change user shell to zsh
