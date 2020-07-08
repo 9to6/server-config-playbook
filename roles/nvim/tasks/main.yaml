@@ -26,9 +26,21 @@
     alternatives: name=editor path=/usr/bin/nvim
   become: true
 
-- pip:
-    name: neovim
+- name: Check that the .pyenv exists
+  stat:
+    path: /home/{{ username }}/.pyenv
+  register: pyenv_result
+
+- name: install pynvim on the system python, if it doesn't exist already
+  pip:
+    name: pynvim
+    executable: pip3
   become: true
+  when: pyenv_result.stat.exists == False
+
+- name: install pynvim on the pyenv python, if it doesn't exist already
+  shell: export PATH="/home/{{ username }}/.pyenv/bin:$PATH" && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)" && pyenv shell {{ pyenv_default_python }} && pip install pynvim
+  when: pyenv_result.stat.exists == True
 
 - name: install vimrc
   when: vimrc_use

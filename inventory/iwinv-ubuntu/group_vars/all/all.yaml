@@ -1,3 +1,4 @@
 username: "{{ ansible_user }}"
 usershell: zsh
 tmp_dir: /home/{{ username }}/tmp
+pyenv_default_python: 3.7.5

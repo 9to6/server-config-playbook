@@ -19,3 +19,10 @@
     path: /home/{{ username }}/.config/nvim/init.vim
     src: /home/{{ username }}/.vimrc
     state: link
+
+- name: replace home directory of resource file
+  replace: 
+    path: /home/{{ username }}/.vimrc
+    regexp: '\/Users\/ktg'
+    replace: /home/{{ username }}
+
